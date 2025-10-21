@@ -93,6 +93,8 @@ p<-ggplot(data=plot_c_T,aes(T,c))+theme_classic()+
 ggsave(file=paste(wd,"Input data/c(T) shape.jpeg",sep=""),p,width=5,height=2.5,dpi=700)
 
 
+
+
 #######################################################################################################################
 ###############################
 ###############################     Three cases of the relationship between c(T) and B
@@ -141,7 +143,7 @@ p<-ggarrange(p_left_1,p_right_1,
              p_left_3,p_right_3,
              ncol=2)
 
-ggsave(file=paste(wd,"Output data/Plots/Figure 2_Three cases of the relationship between c(T) and B.jpeg",sep=""),p,width=8,height=9,dpi=700)
+ggsave(file=paste(wd,"Output data/Plots/Figure S1_Three cases of the relationship between c(T) and B.jpeg",sep=""),p,width=8,height=9,dpi=700)
 
 
 
@@ -217,7 +219,7 @@ p<-ggarrange(p_left_1,p_right_1,
              p_left_5,p_right_5,
              ncol=2)
 
-ggsave(file=paste(wd,"Output data/Plots/Figure 3_Different situations of T_eq.jpeg",sep=""),p,width=8,height=10.5,dpi=700)
+ggsave(file=paste(wd,"Output data/Plots/Figure 2_Different situations of T_eq.jpeg",sep=""),p,width=8,height=10.5,dpi=700)
 
 
 
@@ -272,6 +274,7 @@ img_list_extended <- c(img_list, pause_frames)
 # Create animation
 animation <- image_animate(image_join(img_list_extended), fps = 1)  # Adjust fps (frames per second)
 image_write(animation, paste(wd, "Output data/Plots/Supplementary GIF_Movement of T_eq.gif", sep=""))
+
 
 
 
@@ -381,7 +384,7 @@ p3<-ggplot(data=sensitivity_data,aes(slow_phase_est,period,col=sqrt(C_store)))+
 p<-ggarrange(p1,p2,p3,ncol=1,labels=c("(a)","(b)","(c)"),
              label.args = list(gp = grid::gpar(font = 4,cex=1)))
 
-ggsave(file=paste(wd,"Output data/Plots/Figure 4_Centre amplitude period.jpeg",sep=""),p,width=4.5,height=9,dpi=700)
+ggsave(file=paste(wd,"Output data/Plots/Figure S2_Centre amplitude period.jpeg",sep=""),p,width=4.5,height=9,dpi=700)
 
 
 ############################# Slow warming and slow cooling
@@ -401,7 +404,7 @@ p_t3<-ggplot(data=sensitivity_data,aes(t3_est,t3,col=sqrt(C_store)))+
 
 p_slow<-ggarrange(p_t1,p_t3,ncol=2,labels=c("(a)","(b)"),label.args = list(gp = grid::gpar(font = 4,cex=1)))
 
-ggsave(file=paste(wd,"Output data/Plots/Supplementary Figure 1_Slow warming and slow cooling.jpeg",sep=""),p_slow,width=8,height=3.5,dpi=700)
+ggsave(file=paste(wd,"Output data/Plots/Figure S3_Slow warming and slow cooling.jpeg",sep=""),p_slow,width=8,height=3.5,dpi=700)
 
 ############################# Amplification effect of feedback
 
@@ -418,7 +421,13 @@ p_amplify2<-ggplot(data=sensitivity_data,aes((t1+t3)/period,  period/period_sh,c
   scale_x_continuous(breaks=seq(0.5,1,by=0.1))+
   scale_y_continuous(breaks=seq(1,8,by=1))
 
-ggsave(file=paste(wd,"Output data/Plots/Supplementary Figure 2_Amplification of the period.jpeg",sep=""),p_amplify2,width=7,height=5,dpi=700)
+p_amplify<-ggarrange(p_amplify1,p_amplify2,ncol=2,labels=c("(a)","(b)"),label.args = list(gp = grid::gpar(font = 4,cex=1)))
+
+ggsave(file=paste(wd,"Output data/Plots/Figure S4_Amplification of the period.jpeg",sep=""),p_amplify,width=8,height=3.5,dpi=700)
+
+
+
+
 
 #######################################################################################################################
 ###########################
@@ -426,7 +435,6 @@ ggsave(file=paste(wd,"Output data/Plots/Supplementary Figure 2_Amplification of 
 ###########################
 #######################################################################################################################
 
-################################ fast and slow manifold
 
 param_example<-data.frame(C_store=20^2,
                           T_optim=10,
@@ -463,16 +471,26 @@ T_lim<-c(10-0.7,10+0.7);v_lim<-c(-0.08,0.08)
 p_manifold<-ggplot()+theme_bw()+
   geom_point(data=solution,aes(T,v),size=0.05)+
   geom_path(data=solution,aes(T,v),size=0.05)+
-  geom_line(data=manifold,aes(T_vals,slow_manifold),col="dodgerblue3",size=0.3)+
-  geom_line(data=manifold,aes(T_vals,fast_manifold_upper),col="red",size=0.3)+
-  geom_line(data=manifold,aes(T_vals,fast_manifold_lower),col="red",size=0.3)+
+  geom_line(data=manifold,aes(T_vals,slow_manifold),col="dodgerblue3",size=0.6)+
+  geom_line(data=manifold,aes(T_vals,fast_manifold_upper),col="red",size=0.6)+
+  geom_line(data=manifold,aes(T_vals,fast_manifold_lower),col="red",size=0.6)+
   scale_x_continuous(breaks=10+seq(-0.4,0.4,by=0.2),limits=c(T_lim[1],T_lim[2]))+ylim(v_lim[1],v_lim[2])+
   theme(axis.text=element_blank(),axis.ticks=element_blank())+
   geom_rect(data=param_example,aes(xmin=as.numeric(param_example[,"T1"]),xmax=as.numeric(param_example[,"T2"]),
                                    ymin=-Inf,ymax=Inf ), fill="gray",alpha=0.4)
 
+ggsave(file=paste(wd,"Output data/Plots/Figure S5_Fast slow dynamics.jpeg",sep=""),p_manifold,width=7,height=5,dpi=700)
 
-################################ distortion
+
+
+
+
+#######################################################################################################################
+###########################
+###########################     Distortion of the simple harmonic oscillation
+###########################
+#######################################################################################################################
+
 
 ### solution
 
@@ -546,15 +564,13 @@ p_phase<-ggplot()+theme_bw()+xlim(analysis[["property"]][["T_min"]]-0.1,analysis
   theme(axis.text=element_blank(),axis.ticks=element_blank())
 
 
-
-
 ########################### plot together
 
-p<-ggarrange(p_manifold,p_time,p_phase,p_amplify1,ncol=2,labels=c("(a)","(b)","(c)","(d)"),
+p<-ggarrange(p_time,p_phase,ncol=2,labels=c("(a)","(b)"),
              label.args = list(gp = grid::gpar(font = 4,cex=1)))
 
 
-ggsave(file=paste(wd,"Output data/Plots/Figure 5_Distortion and amplification.jpeg",sep=""),p,width=8,height=6,dpi=700)
+ggsave(file=paste(wd,"Output data/Plots/Figure 3_Distortion and amplification.jpeg",sep=""),p,width=8,height=3.5,dpi=700)
 
 
 
